@@ -128,23 +128,24 @@ if (orcamentoForm) {
             submitBtn.disabled = true;
             submitBtn.textContent = 'Enviando...';
 
-            // Simular envio
+            // preparar dados para o WhatsApp
+            const formData = new FormData(orcamentoForm);
+            const telefoneCadastro = formData.get('telefone');
+            const descricao = formData.get('descricao');
+            const quantidade = formData.get('quantidade');
+            // número do gilberto
+            const telefoneCriador = '5514998767590';
+
+            const whatsappMessage = encodeURIComponent(
+                `Olá! Gostaria de solicitar um orçamento.\n\nNome: ${formData.get('nome')}\nEmail: ${formData.get('email')}\nTelefone: ${telefoneCadastro}\nQuantidade: ${quantidade} canecas\nProjeto: ${descricao}`
+            );
+
+            const whatsappUrl = `https://wa.me/${telefoneCriador}?text=${whatsappMessage}`;
+            // abrir imediatamente para manter contexto de clique e garantir que o app seja acionado
+            window.location.href = whatsappUrl;
+
+            // Simular envio apenas para feedback visual depois de um curto delay
             setTimeout(() => {
-                const formData = new FormData(orcamentoForm);
-                const telefoneCadastro = formData.get('telefone');
-                const descricao = formData.get('descricao');
-                const quantidade = formData.get('quantidade');
-                
-                // Usar o telefone do Gilberto
-                const telefoneCriador = '5514998767590';
-
-                const whatsappMessage = encodeURIComponent(
-                    `Olá! Gostaria de solicitar um orçamento.\n\nNome: ${formData.get('nome')}\nEmail: ${formData.get('email')}\nTelefone: ${telefoneCadastro}\nQuantidade: ${quantidade} canecas\nProjeto: ${descricao}`
-                );
-
-                window.open(`https://wa.me/${telefoneCriador}?text=${whatsappMessage}`, '_blank');
-
-                // Feedback de sucesso
                 showSuccessMessage(orcamentoForm, 'Orçamento enviado com sucesso!');
 
                 orcamentoForm.reset();
