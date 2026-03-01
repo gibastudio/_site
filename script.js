@@ -140,8 +140,16 @@ if (orcamentoForm) {
                 `Olá! Gostaria de solicitar um orçamento.\n\nNome: ${formData.get('nome')}\nEmail: ${formData.get('email')}\nTelefone: ${telefoneCadastro}\nQuantidade: ${quantidade} canecas\nProjeto: ${descricao}`
             );
 
-            const whatsappUrl = `https://wa.me/${telefoneCriador}?text=${whatsappMessage}`;
-            // abrir imediatamente para manter contexto de clique e garantir que o app seja acionado
+// escolher esquema apropriado: 'whatsapp://' em mobile para garantir abertura do app,
+    // caso não funcione, usar o link padrão wa.me como fallback.
+    const isMobile = /Android|iPhone|iPad|iPod|IEMobile|WPDesktop/i.test(navigator.userAgent);
+    let whatsappUrl;
+    if (isMobile) {
+        whatsappUrl = `whatsapp://send?phone=${telefoneCriador}&text=${whatsappMessage}`;
+    } else {
+        whatsappUrl = `https://wa.me/${telefoneCriador}?text=${whatsappMessage}`;
+    }
+    // navegação imediata para manter contexto de clique e garantir abertura do app em mobile
             window.location.href = whatsappUrl;
 
             // Simular envio apenas para feedback visual depois de um curto delay
